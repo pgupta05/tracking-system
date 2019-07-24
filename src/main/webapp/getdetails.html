@@ -1,0 +1,63 @@
+<html ng-app="app">
+<head>
+  <meta charset="utf-8">
+  <title>RaastechProcesstracking</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+<style>
+   table, th , td {
+      border: 1px solid grey;
+      border-collapse: collapse;
+      padding: 5px;
+   }
+   table tr:nth-child(odd) {
+      background-color: #f2f2f2;
+   }
+   table tr:nth-child(even) {
+      background-color: #ffffff;
+   }
+</style>
+  <script>
+    app=angular.module('app',[]);
+
+    app.controller('ProcessCtrl', function($scope, $http) {
+      $http.get("http://localhost:9034/db/records")
+      .success(function(response){
+        $scope.processData=response;
+        $scope.reverse=true;
+      })
+      .error(function() {
+
+      });
+    }
+    
+    );
+
+  </script>
+</head>
+<body ng-controller="ProcessCtrl">
+  Search : <input type="text" name="searchField" ng-model="SearchField" value="" /> <br>
+  <table border=0 class="table-striped">
+    <tr>
+      <th> <a href="" ng-click="sortField='activityInfoId'; reverse=!reverse">Activity ID</a></th>
+      <th> <a href="" ng-click="sortField='domainId'; reverse=!reverse">Domain ID</a></th>
+      <th> <a href="" ng-click="sortField='instanceID'; reverse=!reverse">Instance ID</a></th>
+      <th> <a href="" ng-click="sortField='procesName'; reverse=!reverse">Process Name</a></th>
+      <th> <a href="" ng-click="sortField='currentActivity'; reverse=!reverse">Current Activity</a></th>
+      <th> <a href="" ng-click="sortField='originProcess'; reverse=!reverse">Origin Process</a></th>
+      <th> <a href="" ng-click="sortField='originSourceId'; reverse=!reverse">Origine Source ID</a></th>
+      <th> <a href="" ng-click="sortField='processStatus'; reverse=!reverse">Process Status</a></th>
+    </tr>
+    <tr ng-repeat="data in processData | filter : SearchField | orderBy:sortField:reverse">
+        <td>{{data.activityInfoId}}</td>
+        <td>{{data.domainId}}</td>
+        <td>{{data.instanceID}}</td>
+        <td>{{data.procesName}}</td>
+        <td>{{data.currentActivity}}</td>
+        <td>{{data.originProcess}}</td>
+        <td>{{data.originSourceId}}</td>
+        <td>{{data.processStatus}}</td>
+    </tr>
+
+  </table>
+</body>
+</html>
